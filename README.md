@@ -10,10 +10,10 @@ Codex skill for iterative deep debugging:
 
 ## Install
 
-Recommended: ask Codex to install the skill with `$skill-installer`:
+Recommended: install with Codex's skill installer:
 
 ```text
-Use $skill-installer to install https://github.com/jake-w-liu/deep-debug/tree/main/deep-debug
+$skill-installer https://github.com/jake-w-liu/deep-debug/tree/main/deep-debug
 ```
 
 Restart Codex after installing so the new skill is picked up.
