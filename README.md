@@ -1,12 +1,22 @@
 # deep-debug
 
-Codex skill for iterative deep debugging:
+Codex skill for iterative deep debugging across the full applicable problem surface:
 
-1. run a fresh bug audit,
+1. run a fresh from-scratch audit,
 2. verify suspected bugs before treating them as real,
-3. fix confirmed issues,
-4. reverify,
-5. repeat until a final fresh pass finds no confirmed bugs.
+3. cover domain correctness, implementation correctness, memory/resource behavior, and performance where relevant,
+4. fix confirmed issues,
+5. CRC-reverify every fix,
+6. repeat until a final fresh pass finds no confirmed bugs.
+
+The updated skill is designed for users who want stronger assurance on:
+
+- math and physics correctness when the target contains domain logic,
+- code implementation correctness,
+- memory allocation and resource efficiency,
+- performance and optimization claims backed by measurement rather than guesswork.
+
+It does not permit unverified claims such as "fully optimized" or "physically correct". Those claims now require evidence, or the remaining gap must be stated explicitly.
 
 ## Install
 
@@ -45,7 +55,7 @@ git pull
 Invoke the skill explicitly:
 
 ```text
-Use $deep-debug and set this as a goal to audit this code path for real bugs, verify each finding, fix confirmed issues, and reverify until no bugs remain.
+Use $deep-debug and set this as a goal to audit this code path from scratch for real bugs across domain correctness, implementation correctness, memory/resource behavior, and performance where applicable; verify each finding, fix confirmed issues, and CRC-reverify until no confirmed bugs remain.
 ```
 
 It is useful for requests like:
@@ -53,6 +63,7 @@ It is useful for requests like:
 - `Use $deep-debug and set this as a goal on this failing workflow.`
 - `Deep-debug this PR and fix real bugs only.`
 - `Run a fresh audit, verify findings, fix, and reverify.`
+- `Use $deep-debug for a from-scratch audit of math correctness, implementation correctness, memory behavior, and performance, then fix and CRC-reverify everything you can prove.`
 
 Goal creation still needs to be explicit. `$deep-debug` alone should run the workflow, but a prompt that says `set this as a goal` should create and complete a goal around the full audit, fix, and reverify loop.
 

@@ -1,4 +1,4 @@
 interface:
   display_name: "Deep Debug"
-  short_description: "Iterative bug audit, fix, and reverify loop"
-  default_prompt: "Use $deep-debug and set this as a goal to audit this code path for real bugs, verify each finding, fix confirmed issues, and reverify until no bugs remain."
+  short_description: "Fresh full-scope bug audit with CRC reverify"
+  default_prompt: "Use $deep-debug and set this as a goal to audit this code path from scratch for real bugs across domain correctness, implementation correctness, memory/resource behavior, and performance where applicable; verify each finding, fix confirmed issues, and CRC-reverify until no confirmed bugs remain."
