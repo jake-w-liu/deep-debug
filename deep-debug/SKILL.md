@@ -17,6 +17,14 @@ Run a fresh iterative bug hunt:
 6. Reverify the original failure, the new/updated tests, and nearby or broader checks proportional to risk.
 7. Repeat from a fresh audit pass until no new verified bugs are found.
 
+## Goal Handling
+
+When goal tools are available, create a goal before starting only if the user explicitly asks to set the deep-debug run as a goal. Treat prompts like `Use $deep-debug and set this as a goal...` or `Use deep-debug as a goal...` as explicit goal requests.
+
+Do not create a goal from `$deep-debug` alone. Goal creation requires an explicit user request.
+
+If a goal is created, use an objective that names the target and includes the full loop: audit, verify, fix, and reverify until no confirmed bugs remain. Mark the goal complete only after the stop condition is satisfied.
+
 ## False-Positive Guardrails
 
 - Do not present style issues, speculative improvements, missing features, or harmless edge cases as bugs unless they violate an explicit requirement or observable behavior.

@@ -45,14 +45,16 @@ git pull
 Invoke the skill explicitly:
 
 ```text
-Use $deep-debug to audit this code path for real bugs, verify each finding, fix confirmed issues, and reverify until no bugs remain.
+Use $deep-debug and set this as a goal to audit this code path for real bugs, verify each finding, fix confirmed issues, and reverify until no bugs remain.
 ```
 
 It is useful for requests like:
 
-- `Use $deep-debug on this failing workflow.`
+- `Use $deep-debug and set this as a goal on this failing workflow.`
 - `Deep-debug this PR and fix real bugs only.`
 - `Run a fresh audit, verify findings, fix, and reverify.`
+
+Goal creation still needs to be explicit. `$deep-debug` alone should run the workflow, but a prompt that says `set this as a goal` should create and complete a goal around the full audit, fix, and reverify loop.
 
 ## Files
 
