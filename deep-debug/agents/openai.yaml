@@ -1,0 +1,4 @@
+interface:
+  display_name: "Deep Debug"
+  short_description: "Iterative bug audit, fix, and reverify loop"
+  default_prompt: "Use $deep-debug to audit this code path for real bugs, verify each finding, fix confirmed issues, and reverify until no bugs remain."

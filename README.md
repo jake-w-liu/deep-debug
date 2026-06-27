@@ -10,16 +10,30 @@ Codex skill for iterative deep debugging:
 
 ## Install
 
-Clone this repository into your Codex skills directory:
+Recommended: ask Codex to install the skill with `$skill-installer`:
+
+```text
+Use $skill-installer to install https://github.com/jake-w-liu/deep-debug/tree/main/deep-debug
+```
+
+Restart Codex after installing so the new skill is picked up.
+
+If you already have a local `deep-debug` skill folder, move it aside before installing. The installer aborts when the destination already exists.
+
+## Manual install
+
+You can also clone this repository directly into your Codex skills directory:
 
 ```bash
 mkdir -p "${CODEX_HOME:-$HOME/.codex}/skills"
 git clone https://github.com/jake-w-liu/deep-debug.git "${CODEX_HOME:-$HOME/.codex}/skills/deep-debug"
 ```
 
-If you already have a local `deep-debug` skill folder, move it aside or update it manually before cloning.
-
 ## Update
+
+For `$skill-installer` installs, reinstall from the URL above after moving aside the old local copy.
+
+For manual clone installs:
 
 ```bash
 cd "${CODEX_HOME:-$HOME/.codex}/skills/deep-debug"
@@ -42,5 +56,6 @@ It is useful for requests like:
 
 ## Files
 
-- `SKILL.md`: skill instructions loaded by Codex.
-- `agents/openai.yaml`: UI metadata for the skill.
+- `deep-debug/SKILL.md`: installable skill instructions.
+- `deep-debug/agents/openai.yaml`: installable skill UI metadata.
+- Root `SKILL.md` and `agents/openai.yaml`: keep direct-clone installs valid.
