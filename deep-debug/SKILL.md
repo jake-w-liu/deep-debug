@@ -35,7 +35,7 @@ If a goal is created, use an objective that names the target and includes the fu
 ## Fresh-Pass Tactics
 
 - On each iteration, change the audit angle instead of only re-reading the previous finding: follow a different entry point, inspect neighboring modules, run a different test scope, or trace a different data shape.
-- When multi-agent tools are available and the task is broad enough, launch an independent fresh audit with only the task-relevant context and compare concrete evidence, not conclusions.
+- When multi-agent tools are available, current instructions permit delegation, and the task is broad enough, launch an independent fresh audit with only the task-relevant context and compare concrete evidence, not conclusions.
 - Keep a compact ledger of candidates: `candidate`, `verification`, `status`, `fix`, and `reverify`.
 
 ## Stop Condition
