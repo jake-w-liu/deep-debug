@@ -1,6 +1,6 @@
 # deep-debug
 
-Codex skill for iterative deep debugging across the full applicable problem surface:
+Codex and Claude Code skill for iterative deep debugging across the full applicable problem surface:
 
 1. run a fresh from-scratch audit,
 2. verify suspected bugs before treating them as real,
@@ -35,7 +35,7 @@ If you already have a local `deep-debug` skill folder, move it aside before inst
 This repository also installs as a Claude Code plugin:
 
 ```bash
-claude plugin marketplace add "/Users/jake/plugins/deep-debug"
+claude plugin marketplace add jake-w-liu/deep-debug
 claude plugin install deep-debug@deep-debug
 ```
 
@@ -61,10 +61,16 @@ git pull
 
 ## Use
 
-Invoke the skill explicitly:
+In Codex, invoke the skill explicitly with the `$` prefix:
 
 ```text
 Use $deep-debug and set this as a goal to audit this code path from scratch for real bugs across domain correctness, implementation correctness, memory/resource behavior, and performance where applicable; verify each finding, fix confirmed issues, and CRC-reverify until no confirmed bugs remain.
+```
+
+In Claude Code there is no `$` prefix. The skill activates automatically when you ask for the relevant task (its description matches the request), or you can ask for it by name:
+
+```text
+Use deep-debug to audit this code path from scratch for real bugs across domain correctness, implementation correctness, memory/resource behavior, and performance where applicable; verify each finding, fix confirmed issues, and CRC-reverify until no confirmed bugs remain.
 ```
 
 It is useful for requests like:
@@ -74,10 +80,13 @@ It is useful for requests like:
 - `Run a fresh audit, verify findings, fix, and reverify.`
 - `Use $deep-debug for a from-scratch audit of math correctness, implementation correctness, memory behavior, and performance, then fix and CRC-reverify everything you can prove.`
 
-Goal creation still needs to be explicit. `$deep-debug` alone should run the workflow, but a prompt that says `set this as a goal` should create and complete a goal around the full audit, fix, and reverify loop.
+Goal creation still needs to be explicit. Invoking the skill alone (`$deep-debug` in Codex, or asking for `deep-debug` by name in Claude Code) should run the workflow, but a prompt that says `set this as a goal` should create and complete a goal around the full audit, fix, and reverify loop.
 
 ## Files
 
-- `deep-debug/SKILL.md`: installable skill instructions.
-- `deep-debug/agents/openai.yaml`: installable skill UI metadata.
+- `skills/deep-debug/SKILL.md`: standard Claude Code skill instructions (used by the Claude Code plugin install).
+- `.claude-plugin/plugin.json`: Claude Code plugin manifest.
+- `.claude-plugin/marketplace.json`: Claude Code marketplace manifest.
+- `deep-debug/SKILL.md`: installable skill instructions (retained for the Codex `$skill-installer` install).
+- `deep-debug/agents/openai.yaml`: installable skill UI metadata (retained for the Codex `$skill-installer` install).
 - Root `SKILL.md` and `agents/openai.yaml`: keep direct-clone installs valid.
