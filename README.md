@@ -30,6 +30,15 @@ Restart Codex after installing so the new skill is picked up.
 
 If you already have a local `deep-debug` skill folder, move it aside before installing. The installer aborts when the destination already exists.
 
+## Install (Claude Code)
+
+This repository also installs as a Claude Code plugin:
+
+```bash
+claude plugin marketplace add "/Users/jake/plugins/deep-debug"
+claude plugin install deep-debug@deep-debug
+```
+
 ## Manual install
 
 You can also clone this repository directly into your Codex skills directory:

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "deep-debug",
+  "description": "Iterative deep debugging workflow that audits, verifies, fixes, and CRC-reverifies real software bugs.",
+  "owner": {
+    "name": "jake-w-liu"
+  },
+  "plugins": [
+    {
+      "name": "deep-debug",
+      "description": "Iterative deep debugging workflow that audits, verifies, fixes, and CRC-reverifies real software bugs.",
+      "source": "./",
+      "category": "productivity"
+    }
+  ]
+}
