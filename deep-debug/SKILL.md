@@ -1,6 +1,6 @@
 ---
 name: deep-debug
-description: Iterative deep debugging workflow for finding, verifying, fixing, and rechecking real software bugs across domain correctness, implementation correctness, memory/resource behavior, and performance where applicable. Use when the user asks for deep-debug, deep debugging, a fresh bug audit, a bug hunt, an audit, verify, fix, and reverify loop, or wants Codex to keep investigating until no confirmed bugs remain while avoiding false positives.
+description: Iterative deep debugging workflow for finding, verifying, fixing, and rechecking real software bugs across domain correctness, implementation correctness, memory/resource behavior, and performance where applicable. Use when the user asks for deep-debug, deep debugging, a fresh bug audit, a bug hunt, an audit, verify, fix, and reverify loop, or wants the assistant to keep investigating until no confirmed bugs remain while avoiding false positives.
 ---
 
 # Deep Debug
