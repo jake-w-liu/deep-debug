@@ -1,13 +1,15 @@
 # deep-debug
 
-Codex and Claude Code skill for iterative deep debugging across the full applicable problem surface:
+Codex and Claude Code skill for fresh, complete iterative deep debugging across the full applicable problem surface:
 
-1. run a fresh from-scratch audit,
+1. run a fresh complete from-scratch audit,
 2. verify suspected bugs before treating them as real,
 3. cover domain correctness, implementation correctness, memory/resource behavior, and performance where relevant,
 4. fix confirmed issues,
 5. CRC-reverify every fix,
-6. repeat until a final fresh pass finds no confirmed bugs.
+6. repeat until a final independent fresh pass finds no confirmed bugs.
+
+The default is deliberately not narrow. A request for `deep-debug`, `deep debugging`, `fresh audit`, `bug hunt`, `audit`, or verify/fix/reverify means rebuild the repo and problem map from current sources and audit the applicable surface end to end. A narrow audit is allowed only when the user explicitly bounds the work to a specific file, function, module, failing behavior, or command; even then, the audit must be fresh and deep inside that boundary.
 
 The updated skill is designed for users who want stronger assurance on:
 
@@ -77,7 +79,7 @@ It is useful for requests like:
 
 - `Use $deep-debug and set this as a goal on this failing workflow.`
 - `Deep-debug this PR and fix real bugs only.`
-- `Run a fresh audit, verify findings, fix, and reverify.`
+- `Run a fresh complete audit, verify findings, fix, and reverify.`
 - `Use $deep-debug for a from-scratch audit of math correctness, implementation correctness, memory behavior, and performance, then fix and CRC-reverify everything you can prove.`
 
 Goal creation still needs to be explicit. Invoking the skill alone (`$deep-debug` in Codex, or asking for `deep-debug` by name in Claude Code) should run the workflow, but a prompt that says `set this as a goal` should create and complete a goal around the full audit, fix, and reverify loop.

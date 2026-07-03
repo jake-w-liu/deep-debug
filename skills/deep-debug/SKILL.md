@@ -1,13 +1,17 @@
 ---
 name: deep-debug
-description: Iterative deep debugging workflow for finding, verifying, fixing, and rechecking real software bugs across domain correctness, implementation correctness, memory/resource behavior, and performance where applicable. Use when the user asks for deep-debug, deep debugging, a fresh bug audit, a bug hunt, an audit, verify, fix, and reverify loop, or wants the assistant to keep investigating until no confirmed bugs remain while avoiding false positives.
+description: Fresh, complete, iterative deep debugging workflow for finding, verifying, fixing, and rechecking real software bugs across domain correctness, implementation correctness, memory/resource behavior, and performance where applicable. Use when the user asks for deep-debug, deep debugging, a fresh bug audit, a bug hunt, an audit, verify, fix, and reverify loop, or wants the assistant to keep investigating until no confirmed bugs remain while avoiding false positives.
 ---
 
 # Deep Debug
 
 ## Scope and Standard
 
-Run a fresh from-scratch audit unless the user explicitly narrows scope.
+Default mode is a fresh, complete audit. Treat `deep-debug`, `deep debugging`, `fresh audit`, `bug hunt`, `audit`, or a verify/fix/reverify loop as requiring a new end-to-end pass over the applicable target surface. Do not narrow to a previous bug, recent diff, one suspected file, the failing test, or a remembered hypothesis unless the user explicitly gives that bounded scope.
+
+A fresh audit means rebuilding the repo and problem map from current sources, commands, tests, logs, and docs in this run. Conversation history and earlier findings are context only; they do not count as verification, coverage, or a stop condition. Re-open relevant files, re-run current checks where feasible, and re-derive the candidate list before making any verdict.
+
+A deep audit means covering the full applicable surface: public entry points, core internal flows, data/model invariants, domain formulas, state transitions, boundary/error paths, concurrency/resource behavior, configuration/CI, tests, and dependency or platform boundaries. If the repository is too large to finish in one pass, state the partial coverage and continue iterating; do not silently downgrade to a narrow audit.
 
 Verification is mandatory for every finding and code claim. Apply CRC to every fix and every post-fix verdict:
 
@@ -21,8 +25,8 @@ Do not claim code is "fully optimized", "memory efficient", "physically correct"
 
 Run a fresh iterative bug hunt:
 
-1. Rebuild context from the current repo, user request, failing behavior, logs, tests, and recent diffs. Do not rely on prior assumptions when starting a new pass.
-2. Establish the audit matrix for the target. Unless clearly irrelevant, inspect these dimensions:
+1. Rebuild context from the current repo/worktree, user request, failing behavior, logs, tests, CI, docs/contracts, package or app entry points, and recent diffs. Do not rely on prior assumptions when starting a new pass.
+2. Establish the audit matrix for the target and record the actual surface you intend to cover. Unless clearly irrelevant after inspecting enough context, include these dimensions:
    - domain/science correctness: formulas, units, invariants, physical constraints, numerical methods, tolerances, and known-good reference behavior.
    - implementation correctness: control flow, data flow, state transitions, API contracts, persistence, configuration, and error paths.
    - memory/resource behavior: allocations, leaks, ownership/lifetime, buffer growth, cleanup, and non-memory resources such as file, socket, GPU, or handle usage.
@@ -34,7 +38,16 @@ Run a fresh iterative bug hunt:
    - Correctness: rerun the original failure, new/updated tests, and nearby logic checks; cover boundaries and domain invariants that could regress.
    - Robustness: run variant, stress, or error-path checks proportional to risk; confirm cleanup and realistic-input behavior.
    - Completeness: verify the full intended path works end to end without placeholders, silent fallbacks, or partially fixed behavior.
-7. Repeat from a fresh audit pass until no new verified bugs are found.
+7. Repeat from a fresh audit pass until no new verified bugs are found. Each repeat must start from the audit matrix and current code, not only from the previous fix or previous candidate.
+
+## Narrowing Rules
+
+Run a narrow audit only when the user explicitly asks for a bounded scope, such as a specific file, function, module, failing behavior, or command. Even then:
+
+- State the boundary before investigating.
+- Run a fresh, deep audit inside that boundary.
+- Do not imply the whole repo or broader system was audited.
+- If the user asks for a fresh audit after a prior pass or challenges that the audit was narrow, reset to the default complete audit.
 
 ## Goal Handling
 
@@ -55,6 +68,8 @@ If a goal is created, use an objective that names the target and includes the fu
 ## Fresh-Pass Tactics
 
 - On each iteration, change the audit angle instead of only re-reading the previous finding: follow a different entry point, inspect neighboring modules, run a different test scope, or trace a different data shape.
+- For the final pass, choose at least one independent route that was not the path to the last fix: public API index, test suite map, config/CI path, dependency boundary, domain invariant list, or resource-lifetime path.
+- Search broadly before concluding: enumerate files or modules, inspect representative entry points and callers, and connect tests to implementation paths rather than relying on the files already touched.
 - When multi-agent tools are available, current instructions permit delegation, and the task is broad enough, launch an independent fresh audit with only the task-relevant context and compare concrete evidence, not conclusions.
 - Keep a compact ledger of candidates: `candidate`, `dimension`, `verification`, `status`, `fix`, and `reverify`.
 
@@ -62,9 +77,10 @@ If a goal is created, use an objective that names the target and includes the fu
 
 Stop only after:
 
+- the audit surface was rebuilt from current sources, commands, tests, logs, and docs in this run,
 - all confirmed bugs found so far are fixed or explicitly blocked,
 - each fix has been reverified under CRC,
 - each relevant audit dimension was either verified or explicitly marked not applicable with a reason,
 - any claims about math/physics correctness, memory efficiency, or optimization are backed by tests, proofs, profiles, or benchmarks,
-- one final fresh audit pass finds no new verified bugs, and
+- one final fresh audit pass, using an independent route through the code rather than only regression-checking the fixes, finds no new verified bugs, and
 - the final response states what was fixed, what was run, and any remaining unverified risks or test gaps.

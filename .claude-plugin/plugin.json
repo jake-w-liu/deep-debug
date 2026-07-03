@@ -1,7 +1,7 @@
 {
   "name": "deep-debug",
-  "version": "1.0.0",
-  "description": "Iterative deep debugging workflow that audits, verifies, fixes, and CRC-reverifies real software bugs.",
+  "version": "1.0.1",
+  "description": "Fresh complete deep debugging workflow that audits, verifies, fixes, and CRC-reverifies real software bugs.",
   "author": {
     "name": "jake-w-liu"
   },
