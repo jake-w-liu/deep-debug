@@ -1,0 +1,6 @@
+sionna-rt==2.0.1
+numpy>=2.0,<3
+scipy>=1.13,<2
+matplotlib>=3.8,<4
+pandas>=2.2,<3
+networkx>=3.2,<4
