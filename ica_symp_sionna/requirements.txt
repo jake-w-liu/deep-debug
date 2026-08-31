@@ -1,0 +1,5 @@
+sionna-rt==2.0.1
+numpy==2.2.6
+scipy==1.15.3
+matplotlib==3.10.3
+pypdf==5.6.0
