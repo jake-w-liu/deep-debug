@@ -1,0 +1,100 @@
+name: ICA-SYMP 2027 Sionna paper delivery
+
+on:
+  push:
+    branches:
+      - ica-symp-delivery
+    paths:
+      - "ica_symp_sionna/**"
+      - ".github/workflows/ica-symp-sionna-delivery.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    steps:
+      - name: Check out delivery branch
+        uses: actions/checkout@v4
+        with:
+          ref: ica-symp-delivery
+          persist-credentials: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: ica_symp_sionna/requirements.txt
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
+            llvm libgl1 libegl1 libxrender1 libxext6 \
+            texlive-latex-base texlive-latex-recommended texlive-latex-extra \
+            texlive-fonts-recommended texlive-publishers latexmk \
+            poppler-utils zip unzip
+
+      - name: Install pinned Python environment
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r ica_symp_sionna/requirements.txt
+          python - <<'PY'
+          import sionna.rt, mitsuba, drjit, numpy, scipy, matplotlib, pypdf
+          print('Sionna RT import: PASS')
+          print('Mitsuba variants:', mitsuba.variants())
+          PY
+
+      - name: Locate LLVM runtime
+        run: |
+          LLVM_PATH="$(find /usr/lib -path '*/libLLVM.so*' -type f | head -n 1)"
+          echo "DRJIT_LIBLLVM_PATH=${LLVM_PATH}" >> "$GITHUB_ENV"
+          echo "LLVM library: ${LLVM_PATH}"
+
+      - name: Execute Sionna studies, papers, and clean-room checks
+        id: paper_build
+        continue-on-error: true
+        env:
+          MPLBACKEND: Agg
+          SAMPLES_PER_TX: "300000"
+          PYTHONHASHSEED: "0"
+        run: |
+          set -o pipefail
+          python ica_symp_sionna/build_all.py 2>&1 | tee ICA_SYMP_2027_build.log
+
+      - name: Preserve build log
+        if: always()
+        run: |
+          mkdir -p deliverables
+          cp ICA_SYMP_2027_build.log deliverables/CI_build.log || true
+          if [ "${{ steps.paper_build.outcome }}" != "success" ]; then
+            printf 'Workflow build failed. See CI_build.log and BUILD_FAILURE.txt.\n' > deliverables/CI_FAILURE.txt
+          fi
+
+      - name: Commit generated deliverables
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f deliverables
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish verified ICA-SYMP 2027 Sionna paper packages"
+            git push origin HEAD:ica-symp-delivery
+          fi
+
+      - name: Upload delivery mirror
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ICA-SYMP-2027-Sionna-papers
+          path: deliverables
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Enforce successful verification
+        if: steps.paper_build.outcome != 'success'
+        run: exit 1
