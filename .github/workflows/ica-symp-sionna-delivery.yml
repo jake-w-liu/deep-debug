@@ -86,12 +86,15 @@ jobs:
             git push origin HEAD:ica-symp-delivery
           fi
 
-      - name: Upload delivery mirror
+      - name: Upload delivery and exact build source
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: ICA-SYMP-2027-Sionna-papers
-          path: deliverables
+          path: |
+            deliverables
+            ica_symp_sionna
+            ICA_SYMP_2027_build.log
           if-no-files-found: error
           retention-days: 30
 
