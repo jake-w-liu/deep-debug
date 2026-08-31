@@ -22,6 +22,16 @@ jobs:
         run: |
           gzip -dc tmp_ica_symp/run_all.py.gz > tmp_ica_symp/run_all.py
           gzip -dc tmp_ica_symp/verify_outputs.py.gz > tmp_ica_symp/verify_outputs.py
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('tmp_ica_symp/run_all.py')
+          text = path.read_text()
+          old = 'Box("floor", (0, 18, 0, 12, -0.12, 0), "floor", obstacle=False),'
+          new = 'Box("ground", (0, 18, 0, 12, -0.12, 0), "floor", obstacle=False),'
+          if old not in text:
+              raise SystemExit('Expected paper-2 floor declaration was not found')
+          path.write_text(text.replace(old, new, 1))
+          PY
           python -m py_compile tmp_ica_symp/run_all.py tmp_ica_symp/verify_outputs.py
       - name: Install runtime dependencies
         run: |
