@@ -1,0 +1,48 @@
+name: Temporary ICA-SYMP Sionna Verification
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "tmp_ica_symp/**"
+  workflow_dispatch:
+
+jobs:
+  reproduce:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Restore source scripts
+        run: |
+          gzip -dc tmp_ica_symp/run_all.py.gz > tmp_ica_symp/run_all.py
+          gzip -dc tmp_ica_symp/verify_outputs.py.gz > tmp_ica_symp/verify_outputs.py
+          python -m py_compile tmp_ica_symp/run_all.py tmp_ica_symp/verify_outputs.py
+      - name: Install runtime dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y llvm libgl1 libegl1
+          python -m pip install --upgrade pip
+          python -m pip install -r tmp_ica_symp/requirements.txt
+      - name: Execute the two Sionna RT studies
+        env:
+          SAMPLES_PER_TX: "750000"
+        run: python tmp_ica_symp/run_all.py --output tmp_ica_symp/results
+      - name: Verify the numerical artifact
+        run: python tmp_ica_symp/verify_outputs.py tmp_ica_symp/results
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ica-symp-sionna-numerical-results
+          path: |
+            tmp_ica_symp/results
+            tmp_ica_symp/run_all.py
+            tmp_ica_symp/verify_outputs.py
+            tmp_ica_symp/requirements.txt
+          if-no-files-found: error
+          retention-days: 7
